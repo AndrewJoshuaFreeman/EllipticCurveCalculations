@@ -1,9 +1,19 @@
+#include "verifications.h"
 #include <iostream>
 #include <cmath>
 
-bool verifyWeirstrass([[maybe_unused]] int a, [[maybe_unused]] int b ){return true;}
 
-bool verifyFiniteField( [[maybe_unused]] int field ){return true;}
+bool Verify::WeierstrassForm( int a, int b ) 
+{
+    return ( 4 * pow( a, 3.0 ) + 27 * pow( b, 2.0 ) != 0 );
+}
+
+bool Verify::FiniteField( [[maybe_unused]] int field )
+{
+    //TODO: implement to check if field is prime itself
+    //      or if field is of the form p ^ k, for prime p and k > 1
+    return true;
+}
 
 int main(){
 
@@ -20,8 +30,8 @@ int main(){
     std::cout << "Enter in your finite field: ";
     std::cin >> field;
 
-    verifyWeirstrass( a, b );
-    verifyFiniteField( field );
+    if (Verify::WeierstrassForm( a, b )) std::cout << "form good\n";
+    if (Verify::FiniteField( field )) std::cout << "field good\n";
     
     
 return 0;

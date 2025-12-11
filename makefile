@@ -7,7 +7,7 @@ TARGET = exe
 
 # Source and header files (now in src/ and include/)
 SRCS = src/main.cpp
-HEADERS = include/headers.h
+HEADERS = include/verifications.h
 
 # Default target
 all: $(TARGET)
