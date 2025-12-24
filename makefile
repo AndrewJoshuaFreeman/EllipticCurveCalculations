@@ -1,27 +1,27 @@
-# Compiler and flags
-CXX = g++
-CXXFLAGS = -Wall -Wextra -Werror -pedantic -std=c++17 -O2
+CXX := g++
+CXXFLAGS := -std=c++17 -O3 -ffast-math -Wall -Wextra -pedantic
+INCLUDES := -Iinclude
 
-# Target executable
-TARGET = exe
+SRC_DIR := src
+OBJ_DIR := obj
 
-# Source and header files (now in src/ and include/)
-SRCS = src/main.cpp
-HEADERS = include/verifications.h
+TARGET := eccalc
 
-# Default target
+SRCS := $(SRC_DIR)/main.cpp \
+        $(SRC_DIR)/math_utils.cpp \
+        $(SRC_DIR)/ellipticCurveCalculations.cpp
+
+OBJS := $(SRCS:$(SRC_DIR)/%.cpp=$(OBJ_DIR)/%.o)
+
 all: $(TARGET)
 
-# Build executable
-$(TARGET): $(SRCS) $(HEADERS)
-	$(CXX) $(CXXFLAGS) -Iinclude $(SRCS) -o $(TARGET)
+$(TARGET): $(OBJS)
+	$(CXX) $(CXXFLAGS) -o $@ $^
 
-# Run the program
-run: $(TARGET)
-	./$(TARGET)
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+	mkdir -p $(OBJ_DIR)
+	$(CXX) $(CXXFLAGS) $(INCLUDES) -c $< -o $@
 
-# Clean build files
 clean:
-	rm -f $(TARGET)
+	rm -rf $(TARGET) $(OBJ_DIR)
 
-.PHONY: all run clean
