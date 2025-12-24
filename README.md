@@ -34,21 +34,6 @@ FEATURES
 - Floating-point arithmetic over R with tolerance checks
 - Clean separation into logical source files
 
-
-------------------------------------------------------------
-FILE STRUCTURE
-------------------------------------------------------------
-
-.
-├── main.cpp
-├── math.h
-├── math.cpp
-├── ellipticCurveCalculations.h
-├── ellipticCurveCalculations.cpp
-├── Makefile
-└── README.txt
-
-
 ------------------------------------------------------------
 BUILD INSTRUCTIONS
 ------------------------------------------------------------
