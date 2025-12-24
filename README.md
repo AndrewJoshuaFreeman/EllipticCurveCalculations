@@ -150,24 +150,118 @@ LIMITATIONS
 - Not optimized for large cryptographic parameters.
 - Intended for educational and experimental use only.
 
-
 ------------------------------------------------------------
-LICENSE
-------------------------------------------------------------
-
-MIT License.
-
-
-------------------------------------------------------------
-POSSIBLE EXTENSIONS
+MATHEMATICAL BACKGROUND
 ------------------------------------------------------------
 
-- Compressed point input
-- Additional curve forms
-- File-based input/output
-- Unit tests
-- Visualization for curves over R
-- Support for standardized cryptographic curves
+This program works with elliptic curves in short Weierstrass form:
+
+  y^2 = x^3 + a x + b
+
+Depending on the selected field, all arithmetic is performed over:
+
+- A finite field F_p (integers modulo a prime p)
+- The rational numbers Q
+- The real numbers R
+
+Only non-singular curves are assumed (i.e., curves for which the
+discriminant is nonzero).
 
 
-Happy hacking.
+Elliptic Curve Group Law
+-----------------------
+
+The set of points on an elliptic curve, together with a special point
+called the point at infinity O, forms an abelian group.
+
+Group elements:
+- All points (x, y) satisfying the curve equation
+- The point at infinity O, which acts as the identity
+
+Identity:
+  P + O = P
+
+Inverse:
+  If P = (x, y), then -P = (x, -y)
+  (negation is performed modulo p in F_p)
+
+
+Point Addition (P + Q)
+---------------------
+
+For two distinct points P = (x1, y1) and Q = (x2, y2) with x1 != x2:
+
+1. Compute the slope:
+     λ = (y2 - y1) / (x2 - x1)
+
+2. Compute the resulting point:
+     x3 = λ^2 - x1 - x2
+     y3 = λ(x1 - x3) - y1
+
+The result R = (x3, y3) is the sum P + Q.
+
+If x1 = x2 and y1 = -y2, then:
+  P + Q = O
+
+
+Point Doubling (P + P)
+---------------------
+
+When adding a point to itself, the tangent line at P is used.
+
+For P = (x, y) with y != 0:
+
+1. Compute the slope:
+     λ = (3x^2 + a) / (2y)
+
+2. Compute:
+     x3 = λ^2 - 2x
+     y3 = λ(x - x3) - y
+
+If y = 0, the tangent is vertical and:
+  P + P = O
+
+
+Scalar Multiplication (n · P)
+-----------------------------
+
+Scalar multiplication is defined as repeated addition:
+
+  n · P = P + P + ... + P  (n times)
+
+This program computes n · P using the double-and-add algorithm:
+
+- Express n in binary
+- Repeatedly double the current point
+- Add to the result when the corresponding bit is set
+
+This runs in O(log n) point operations.
+
+
+Field-Specific Notes
+--------------------
+
+Finite Field F_p:
+- All arithmetic is performed modulo p
+- Division is implemented using modular inverses
+- The inverse of a modulo p exists if gcd(a, p) = 1
+
+Rational Numbers Q:
+- All values are stored as reduced fractions
+- Arithmetic is exact (no rounding error)
+
+Real Numbers R:
+- Arithmetic uses double-precision floating point
+- Equality checks use a small tolerance to account for rounding error
+
+
+Point at Infinity
+-----------------
+
+The point at infinity O is treated as a special value and represents
+the identity element of the group. It is returned in cases such as:
+
+- Adding a point to its inverse
+- Doubling a point with y = 0
+- Multiplying a point by 0
+
