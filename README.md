@@ -1,4 +1,4 @@
-Elliptic Curve Calculator (C++)
+Elliptic Curve Calculus Calculator (C++)
 
 A simple, educational C++ program for performing elliptic curve arithmetic
 over different fields:
